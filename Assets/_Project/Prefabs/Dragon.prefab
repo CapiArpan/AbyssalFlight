@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2855443708474146210}
   - component: {fileID: 6583844547028263632}
   - component: {fileID: 6469588532066565384}
+  - component: {fileID: 513918016350029519}
   m_Layer: 0
   m_Name: Dragon
   m_TagString: Untagged
@@ -73,15 +74,15 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 178270023
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: dfbc9a6993e222946b5e5cdf9fedabbf, type: 3}
+  m_Sprite: {fileID: -984910896, guid: 16f013da9d8662d478b5cb4c7d2c28ed, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 44.00358, y: 24}
+  m_Size: {x: 1.81, y: 2.355}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -99,8 +100,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d674e3c1121971645aa88b08e112ad83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidad: 7
-  limiteX: 2.5
+  velocidadHorizontal: 7
+  limiteX: 5
+  suavizadoAnimacion: 10
+  anguloDeInclinacion: 25
   energia: 100
   vidas: 3
   desgasteEnergia: 5
@@ -166,16 +169,37 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.572285, y: -0.023845196}
+  m_Offset: {x: 0.009610653, y: -0.011287212}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.7502236, y: 1.5}
-    newSize: {x: 44.00358, y: 24}
+    oldSize: {x: 0.925, y: 0.95}
+    newSize: {x: 1.81, y: 2.355}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.4625825, y: 1.1184769}
+  m_Size: {x: 0.9318818, y: 0.956161}
   m_EdgeRadius: 0
+--- !u!95 &513918016350029519
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7946278659617683117}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d92539abc407a004b8aa03534ad6c211, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MoverHaciaAbajo : MonoBehaviour
 {
-    [SerializeField] private float velocidadCaida = 5f;
+    [SerializeField] private float velocidadCaida = 15f;
 
     void Update()
     {

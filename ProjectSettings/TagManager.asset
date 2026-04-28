@@ -43,3 +43,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Fondo_Lejano
+    uniqueID: 146537235
+    locked: 0
+  - name: Fondo_Medio
+    uniqueID: 3114255059
+    locked: 0
+  - name: Gameplay
+    uniqueID: 178270023
+    locked: 0
+  - name: Atmosfera_Frontal
+    uniqueID: 3779813207
+    locked: 0
+  - name: Overlay
+    uniqueID: 2965318013
+    locked: 0

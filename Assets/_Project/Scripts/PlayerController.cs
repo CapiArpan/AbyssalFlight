@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // Permite reiniciar el nivel
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movimiento")]
-    [SerializeField] private float velocidad = 7f;
-    [SerializeField] private float limiteX = 2.5f;
+    [Header("Ajustes de Vuelo")]
+    [SerializeField] private float velocidadHorizontal = 7f;
+    [SerializeField] private float limiteX = 5.5f;
+    [SerializeField] private float suavizadoAnimacion = 10f;
+    [SerializeField] private float anguloDeInclinacion = 25f;
 
     [Header("Atributos")]
     [SerializeField] private float energia = 100f;
@@ -16,82 +18,94 @@ public class PlayerController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Text textoScore;
     [SerializeField] private Text textoVidas;
-    [SerializeField] private GameObject panelGameOver; // Para el panel de derrota
+    [SerializeField] private GameObject panelGameOver;
 
+    private Animator anim;
     private int score = 0;
     private bool juegoTerminado = false;
+    private float movimientoInput;
 
     void Start()
     {
-        Time.timeScale = 1f; // Asegura que el tiempo corra al iniciar
+        Time.timeScale = 1f;
+        anim = GetComponent<Animator>();
 
-        // Sistemas de seguridad: Solo actualiza si los textos están conectados
+        // Forzamos la escala a 1 para evitar que las animaciones viejas lo achiquen
+        transform.localScale = Vector3.one;
+
+        // Inicializar UI
         if (textoScore != null) textoScore.text = "SCORE: 0";
-        if (textoVidas != null) textoVidas.text = "VIDAS: 3";
+        if (textoVidas != null) textoVidas.text = "VIDAS: " + vidas;
         if (panelGameOver != null) panelGameOver.SetActive(false);
+
+        if (anim == null) Debug.LogError("¡Falta el componente Animator en el objeto Dragon!");
     }
 
     void Update()
     {
-        // Si ya perdimos, ignoramos el movimiento y esperamos a que reinicie
         if (juegoTerminado)
         {
             if (Input.GetKeyDown(KeyCode.R)) ReiniciarJuego();
             return;
         }
 
-        // 1. Input fluido
-        float movimientoX = Input.GetAxisRaw("Horizontal");
-        transform.Translate(Vector3.right * movimientoX * velocidad * Time.deltaTime);
+        // 1. CAPTURAR INPUT
+        movimientoInput = Input.GetAxisRaw("Horizontal");
+
+        // 2. MOVIMIENTO FÍSICO
+        // Usamos Space.World para que no se "caiga" al rotar
+        transform.Translate(Vector3.right * movimientoInput * velocidadHorizontal * Time.deltaTime, Space.World);
 
         // Limitar bordes
         float clampX = Mathf.Clamp(transform.position.x, -limiteX, limiteX);
         transform.position = new Vector3(clampX, transform.position.y, transform.position.z);
 
-        // 2. Desgaste de energía
-        energia -= desgasteEnergia * Time.deltaTime;
-
-        if (energia <= 0)
+        // 3. ANIMACIÓN Y BLEND TREE
+        if (anim != null)
         {
-            Morir(); // Llama a la muerte real, no solo a un texto
+            // Actualizar DireccionX para el Blend Tree
+            float valorActual = anim.GetFloat("DireccionX");
+            float nuevoValor = Mathf.Lerp(valorActual, movimientoInput, Time.deltaTime * suavizadoAnimacion);
+            anim.SetFloat("DireccionX", nuevoValor);
         }
+
+        // 4. ROTACIÓN VISUAL (BANKING)
+        float rotacionZ = -movimientoInput * anguloDeInclinacion;
+        Quaternion targetRotation = Quaternion.Euler(0, 0, rotacionZ);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * suavizadoAnimacion);
+
+        // 5. LÓGICA DE SUPERVIVENCIA
+        energia -= desgasteEnergia * Time.deltaTime;
+        if (energia <= 0) Morir();
     }
 
     private void OnTriggerEnter2D(Collider2D colision)
     {
-        if (juegoTerminado) return; // Si estamos muertos, somos fantasmas
+        if (juegoTerminado) return;
 
         if (colision.CompareTag("Comida"))
         {
             energia += 20f;
             score += 100;
             if (textoScore != null) textoScore.text = "SCORE: " + score;
-
-            colision.gameObject.SetActive(false); // Apaga la comida
+            colision.gameObject.SetActive(false);
         }
         else if (colision.CompareTag("Obstaculo"))
         {
             vidas--;
             if (textoVidas != null) textoVidas.text = "VIDAS: " + vidas;
+            colision.gameObject.SetActive(false);
 
-            colision.gameObject.SetActive(false); // Apaga la roca
-
-            if (vidas <= 0)
-            {
-                Morir();
-            }
+            if (vidas <= 0) Morir();
         }
     }
 
-    // --- LÓGICA DE DERROTA ---
     void Morir()
     {
         juegoTerminado = true;
-        Time.timeScale = 0f; // Congela el tiempo (ya no caen más cosas)
-
-        if (panelGameOver != null) panelGameOver.SetActive(true); // Muestra tu pantalla
-
-        Debug.Log("Moriste. Presiona la tecla R para reiniciar.");
+        Time.timeScale = 0f;
+        if (panelGameOver != null) panelGameOver.SetActive(true);
+        Debug.Log("Juego Terminado. Presiona R para reiniciar.");
     }
 
     void ReiniciarJuego()

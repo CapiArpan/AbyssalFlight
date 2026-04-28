@@ -8,12 +8,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject prefabObstaculo;
 
     [Header("Tamaño de la Piscina de Memoria")]
-    [SerializeField] private int cantidadComida = 10;
-    [SerializeField] private int cantidadObstaculos = 15;
+    [SerializeField] private int cantidadComida = 15;
+    [SerializeField] private int cantidadObstaculos = 20;
 
     [Header("Configuración de Spawn")]
-    [SerializeField] private float tiempoEntreSpawns = 1.5f;
-    [SerializeField] private float limiteX = 2.5f;
+    [SerializeField] private float tiempoEntreSpawns = 0.8f;
+    [SerializeField] private float limiteX = 6.5f;
 
     // Nuestras piscinas (Listas que guardarán los objetos apagados)
     private List<GameObject> poolComida = new List<GameObject>();
