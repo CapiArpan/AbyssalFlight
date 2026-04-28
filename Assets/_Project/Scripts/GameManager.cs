@@ -1,13 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Clase pequeña para organizar las texturas por pares
+[System.Serializable]
+public class BiomaData
+{
+    public string nombreBioma;
+    public Texture texturaIzquierda;
+    public Texture texturaDerecha;
+}
+
 public class GameManager : MonoBehaviour
 {
-    [Header("Prefabs Originales")]
+    [Header("Prefabs y Pooling")]
     [SerializeField] private GameObject prefabComida;
     [SerializeField] private GameObject prefabObstaculo;
-
-    [Header("Tamaño de la Piscina de Memoria")]
     [SerializeField] private int cantidadComida = 15;
     [SerializeField] private int cantidadObstaculos = 20;
 
@@ -15,60 +22,84 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float tiempoEntreSpawns = 0.8f;
     [SerializeField] private float limiteX = 6.5f;
 
-    // Nuestras piscinas (Listas que guardarán los objetos apagados)
+    [Header("Muros (Configuración de Lados)")]
+    [SerializeField] private ScrollingBackground muroIzquierdo;
+    [SerializeField] private ScrollingBackground muroDerecho;
+
+    [Header("Lista de Biomas (Pares de fotos)")]
+    [SerializeField] private BiomaData[] listaBiomas;
+    [SerializeField] private float tiempoCambioBioma = 30f;
+    [SerializeField] private float duracionTransicion = 3.0f;
+
     private List<GameObject> poolComida = new List<GameObject>();
     private List<GameObject> poolObstaculos = new List<GameObject>();
+    private int indiceBiomaActual = 0;
+    private float cronometroBioma;
 
     void Start()
     {
-        // 1. Llenamos la piscina antes de que el jugador empiece a jugar
         InicializarPiscina(prefabComida, poolComida, cantidadComida);
         InicializarPiscina(prefabObstaculo, poolObstaculos, cantidadObstaculos);
-
-        // 2. Iniciamos el ciclo del juego
         InvokeRepeating(nameof(GenerarObjeto), 1f, tiempoEntreSpawns);
     }
 
-    // Función para pre-fabricar y apagar los objetos
+    void Update()
+    {
+        cronometroBioma += Time.deltaTime;
+        if (cronometroBioma >= tiempoCambioBioma)
+        {
+            CambiarBiomaSincronizado();
+            cronometroBioma = 0;
+        }
+    }
+
+    void CambiarBiomaSincronizado()
+    {
+        if (listaBiomas.Length == 0) return;
+
+        indiceBiomaActual = (indiceBiomaActual + 1) % listaBiomas.Length;
+
+        // Mandamos la textura IZQUIERDA al muro IZQUIERDO
+        if (muroIzquierdo != null)
+            muroIzquierdo.CambiarBiomaSuave(listaBiomas[indiceBiomaActual].texturaIzquierda, duracionTransicion);
+
+        // Mandamos la textura DERECHA al muro DERECHO
+        if (muroDerecho != null)
+            muroDerecho.CambiarBiomaSuave(listaBiomas[indiceBiomaActual].texturaDerecha, duracionTransicion);
+
+        Debug.Log("Cambiando a Bioma: " + listaBiomas[indiceBiomaActual].nombreBioma);
+    }
+
+    // --- MANTENEMOS TU LÓGICA DE POOLING ---
     void InicializarPiscina(GameObject prefab, List<GameObject> pool, int cantidad)
     {
         for (int i = 0; i < cantidad; i++)
         {
             GameObject obj = Instantiate(prefab);
-            obj.SetActive(false); // Los apagamos
-            pool.Add(obj); // Los guardamos en la lista
+            obj.SetActive(false);
+            pool.Add(obj);
         }
     }
 
     void GenerarObjeto()
     {
-        // Decidimos qué tirar (30% comida, 70% obstáculo)
         bool tirarComida = Random.value > 0.7f;
         List<GameObject> piscinaSeleccionada = tirarComida ? poolComida : poolObstaculos;
-
-        // Buscamos un objeto que esté apagado en la piscina
         GameObject objetoListo = ObtenerObjetoInactivo(piscinaSeleccionada);
-
         if (objetoListo != null)
         {
             float xAleatorio = Random.Range(-limiteX, limiteX);
-            // Lo teletransportamos a la parte superior de la pantalla
-            objetoListo.transform.position = new Vector3(xAleatorio, 8f, 0f);
-            // ¡Lo encendemos!
+            objetoListo.transform.position = new Vector3(xAleatorio, 10f, 0f);
             objetoListo.SetActive(true);
         }
     }
 
-    // Buscador de objetos apagados
     GameObject ObtenerObjetoInactivo(List<GameObject> pool)
     {
         foreach (GameObject obj in pool)
         {
-            if (!obj.activeInHierarchy) // Si está desactivado
-            {
-                return obj;
-            }
+            if (!obj.activeInHierarchy) return obj;
         }
-        return null; // Si todos están cayendo al mismo tiempo (raro que pase)
+        return null;
     }
 }
