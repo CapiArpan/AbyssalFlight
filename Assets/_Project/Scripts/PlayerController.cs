@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Ajustes de Vuelo")]
     [SerializeField] private float velocidadHorizontal = 7f;
-    [SerializeField] private float limiteX = 5.5f;
+    [SerializeField] private float limiteX = 6.5f; // Ajustado al nuevo ancho de pantalla
     [SerializeField] private float suavizadoAnimacion = 10f;
     [SerializeField] private float anguloDeInclinacion = 25f;
 
@@ -45,12 +45,34 @@ public class PlayerController : MonoBehaviour
     {
         if (juegoTerminado)
         {
-            if (Input.GetKeyDown(KeyCode.R)) ReiniciarJuego();
+            // Opcional: Permitir reiniciar tocando la pantalla cuando el juego termina
+            if (Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(0))
+            {
+                ReiniciarJuego();
+            }
             return;
         }
 
-        // 1. CAPTURAR INPUT
+        // 1. CAPTURAR INPUT (Híbrido: Teclado + Pantalla Táctil)
         movimientoInput = Input.GetAxisRaw("Horizontal");
+
+        // Detectar si estamos tocando la pantalla o haciendo clic
+        if (Input.GetMouseButton(0))
+        {
+            // Convertimos la posición de la pantalla (píxeles) a coordenadas del mundo de Unity
+            Vector3 posicionToque = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            // Si toca la mitad izquierda de la pantalla, va a la izquierda
+            if (posicionToque.x < 0)
+            {
+                movimientoInput = -1f;
+            }
+            // Si toca la mitad derecha, va a la derecha
+            else
+            {
+                movimientoInput = 1f;
+            }
+        }
 
         // 2. MOVIMIENTO FÍSICO
         // Usamos Space.World para que no se "caiga" al rotar
@@ -105,7 +127,7 @@ public class PlayerController : MonoBehaviour
         juegoTerminado = true;
         Time.timeScale = 0f;
         if (panelGameOver != null) panelGameOver.SetActive(true);
-        Debug.Log("Juego Terminado. Presiona R para reiniciar.");
+        Debug.Log("Juego Terminado. Toca la pantalla o presiona R para reiniciar.");
     }
 
     void ReiniciarJuego()
