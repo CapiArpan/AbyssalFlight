@@ -2,25 +2,34 @@ using UnityEngine;
 
 public class ParallaxMenu : MonoBehaviour
 {
-    [Header("Capas del Menú (Imágenes de fondo)")]
-    public RectTransform[] capas; // Arrastra tus 3 o 4 imágenes aquí
-    public float[] multiplicadores; // Ejemplo: Capa fondo 0.1, Capa frente 1.5
+    [Header("Capas del Parallax")]
+    [SerializeField] private RectTransform[] capas;
 
-    [SerializeField] private float suavizado = 5f;
+    [Header("Intensidad de Movimiento (Fondo a Frente)")]
+    [SerializeField] private float[] multiplicadores = { 0.2f, 0.5f, 0.9f, 1.5f };
+
+    [Header("Ajustes del Sistema")]
+    [SerializeField] private float suavizado = 5.0f;
+    [SerializeField] private float maxDesplazamiento = 60.0f;
+
     private Vector2 offsetInput;
 
     void Update()
     {
-        // Captura movimiento de mouse o dedo
-        Vector2 mousePos = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
-        offsetInput = new Vector2(mousePos.x - 0.5f, mousePos.y - 0.5f) * 100f;
+        // Captura el touch en celular o el mouse en el editor
+        Vector2 posMouse = new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height);
 
+        // Normalizamos el centro de la pantalla como (0,0)
+        offsetInput.x = (posMouse.x - 0.5f) * maxDesplazamiento;
+        offsetInput.y = (posMouse.y - 0.5f) * maxDesplazamiento;
+
+        // Desplazamos de forma asíncrona cada capa para generar la ilusión 3D
         for (int i = 0; i < capas.Length; i++)
         {
-            if (capas[i] != null)
+            if (capas[i] != null && i < multiplicadores.Length)
             {
-                Vector2 targetPos = offsetInput * multiplicadores[i];
-                capas[i].anchoredPosition = Vector2.Lerp(capas[i].anchoredPosition, targetPos, Time.deltaTime * suavizado);
+                Vector2 posObjetivo = offsetInput * multiplicadores[i];
+                capas[i].anchoredPosition = Vector2.Lerp(capas[i].anchoredPosition, posObjetivo, Time.deltaTime * suavizado);
             }
         }
     }
