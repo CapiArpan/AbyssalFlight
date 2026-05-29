@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using System.Collections; // VITAL: Necesario para que funcione el tiempo de parpadeo (Corrutinas)
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Ajustes de Vuelo")]
     [SerializeField] private float velocidadHorizontal = 7f;
-    [SerializeField] private float limiteX = 6.5f; // Ajustado al nuevo ancho de pantalla
+    [SerializeField] private float limiteX = 6.5f;
     [SerializeField] private float suavizadoAnimacion = 10f;
     [SerializeField] private float anguloDeInclinacion = 25f;
 
@@ -15,77 +15,64 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int vidas = 3;
     [SerializeField] private float desgasteEnergia = 5f;
 
-    [Header("UI")]
+    [Header("HUD (Interfaz en Pantalla)")]
     [SerializeField] private Text textoScore;
     [SerializeField] private Text textoVidas;
-    [SerializeField] private GameObject panelGameOver;
+
+    [Header("Sistemas de Game Over y Sonido")]
+    [SerializeField] private GameOverManager managerGameOver;
+    [SerializeField] private AudioSource fuenteSFX_Dragon;
+    [SerializeField] private AudioClip[] sonidosDeGolpe;
+    [SerializeField] private AudioClip[] sonidosDeComida; // NUEVO: Array para tus 3 sonidos de comida
 
     private Animator anim;
+    private SpriteRenderer spriteDragon; // NUEVO: Controla la visibilidad para el parpadeo
     private int score = 0;
     private bool juegoTerminado = false;
+    private bool esInvulnerable = false; // NUEVO: Bloquea el daño repetido
     private float movimientoInput;
 
     void Start()
     {
         Time.timeScale = 1f;
         anim = GetComponent<Animator>();
+        spriteDragon = GetComponent<SpriteRenderer>(); // Capturamos el gráfico del dragón
 
         // Forzamos la escala a 1 para evitar que las animaciones viejas lo achiquen
         transform.localScale = Vector3.one;
 
-        // Inicializar UI
+        // Inicializar UI del HUD
         if (textoScore != null) textoScore.text = "SCORE: 0";
         if (textoVidas != null) textoVidas.text = "VIDAS: " + vidas;
-        if (panelGameOver != null) panelGameOver.SetActive(false);
 
         if (anim == null) Debug.LogError("¡Falta el componente Animator en el objeto Dragon!");
+        if (spriteDragon == null) Debug.LogError("¡Falta el componente SpriteRenderer en el Dragón!");
     }
 
     void Update()
     {
-        if (juegoTerminado)
-        {
-            // Opcional: Permitir reiniciar tocando la pantalla cuando el juego termina
-            if (Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(0))
-            {
-                ReiniciarJuego();
-            }
-            return;
-        }
+        // Si el juego terminó, congelamos el movimiento del dragón inmediatamente
+        if (juegoTerminado) return;
 
         // 1. CAPTURAR INPUT (Híbrido: Teclado + Pantalla Táctil)
         movimientoInput = Input.GetAxisRaw("Horizontal");
 
-        // Detectar si estamos tocando la pantalla o haciendo clic
         if (Input.GetMouseButton(0))
         {
-            // Convertimos la posición de la pantalla (píxeles) a coordenadas del mundo de Unity
             Vector3 posicionToque = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            // Si toca la mitad izquierda de la pantalla, va a la izquierda
-            if (posicionToque.x < 0)
-            {
-                movimientoInput = -1f;
-            }
-            // Si toca la mitad derecha, va a la derecha
-            else
-            {
-                movimientoInput = 1f;
-            }
+            if (posicionToque.x < 0) movimientoInput = -1f;
+            else movimientoInput = 1f;
         }
 
         // 2. MOVIMIENTO FÍSICO
-        // Usamos Space.World para que no se "caiga" al rotar
         transform.Translate(Vector3.right * movimientoInput * velocidadHorizontal * Time.deltaTime, Space.World);
 
-        // Limitar bordes
         float clampX = Mathf.Clamp(transform.position.x, -limiteX, limiteX);
         transform.position = new Vector3(clampX, transform.position.y, transform.position.z);
 
         // 3. ANIMACIÓN Y BLEND TREE
         if (anim != null)
         {
-            // Actualizar DireccionX para el Blend Tree
             float valorActual = anim.GetFloat("DireccionX");
             float nuevoValor = Mathf.Lerp(valorActual, movimientoInput, Time.deltaTime * suavizadoAnimacion);
             anim.SetFloat("DireccionX", nuevoValor);
@@ -111,27 +98,74 @@ public class PlayerController : MonoBehaviour
             score += 100;
             if (textoScore != null) textoScore.text = "SCORE: " + score;
             colision.gameObject.SetActive(false);
+
+            // LLAMADA AL SONIDO DE COMIDA
+            ReproducirSonidoAleatorio(sonidosDeComida);
         }
         else if (colision.CompareTag("Obstaculo"))
         {
+            // Si el dragón es invulnerable por un golpe reciente, cancelamos el daño
+            if (esInvulnerable) return;
+
             vidas--;
             if (textoVidas != null) textoVidas.text = "VIDAS: " + vidas;
             colision.gameObject.SetActive(false);
 
-            if (vidas <= 0) Morir();
+            // LLAMADA AL SONIDO DE GOLPE
+            ReproducirSonidoAleatorio(sonidosDeGolpe);
+
+            if (vidas <= 0)
+            {
+                Morir();
+            }
+            else
+            {
+                // Si sobrevive, activamos la rutina de parpadeo e inmunidad
+                StartCoroutine(RutinaInvulnerabilidad());
+            }
         }
+    }
+
+    // NUEVO: Función inteligente que recibe cualquier lista de sonidos y reproduce uno al azar
+    private void ReproducirSonidoAleatorio(AudioClip[] listaDeSonidos)
+    {
+        if (listaDeSonidos != null && listaDeSonidos.Length > 0 && fuenteSFX_Dragon != null)
+        {
+            int sonidoAleatorio = Random.Range(0, listaDeSonidos.Length);
+            fuenteSFX_Dragon.PlayOneShot(listaDeSonidos[sonidoAleatorio]);
+        }
+    }
+
+    // NUEVO: Rutina de tiempo real para el parpadeo
+    IEnumerator RutinaInvulnerabilidad()
+    {
+        esInvulnerable = true;
+
+        // Bucle que apaga y prende el gráfico del dragón 5 veces (efecto Arcade clásico)
+        for (int i = 0; i < 5; i++)
+        {
+            if (spriteDragon != null) spriteDragon.enabled = false;
+            yield return new WaitForSeconds(0.15f);
+
+            if (spriteDragon != null) spriteDragon.enabled = true;
+            yield return new WaitForSeconds(0.15f);
+        }
+
+        esInvulnerable = false; // Al terminar el bucle, vuelve a ser vulnerable
     }
 
     void Morir()
     {
         juegoTerminado = true;
-        Time.timeScale = 0f;
-        if (panelGameOver != null) panelGameOver.SetActive(true);
-        Debug.Log("Juego Terminado. Toca la pantalla o presiona R para reiniciar.");
-    }
 
-    void ReiniciarJuego()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // El GameOverManager ahora se encarga de pausar el tiempo, poner el video y la música
+        if (managerGameOver != null)
+        {
+            managerGameOver.DispararGameOver(score);
+        }
+        else
+        {
+            Debug.LogError("¡ATENCIÓN! Falta asignar el GameManager en el slot del Dragón.");
+        }
     }
 }
