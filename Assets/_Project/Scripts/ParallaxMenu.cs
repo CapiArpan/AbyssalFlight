@@ -14,6 +14,24 @@ public class ParallaxMenu : MonoBehaviour
 
     private Vector2 offsetInput;
 
+    // NUEVO: La memoria fotográfica para guardar dónde dejaste cada imagen
+    private Vector2[] posicionesIniciales;
+
+    void Start()
+    {
+        // Al arrancar el juego, creamos la lista de memoria
+        posicionesIniciales = new Vector2[capas.Length];
+
+        // Guardamos las coordenadas exactas de cada piedra, dragón y fondo
+        for (int i = 0; i < capas.Length; i++)
+        {
+            if (capas[i] != null)
+            {
+                posicionesIniciales[i] = capas[i].anchoredPosition;
+            }
+        }
+    }
+
     void Update()
     {
         // Captura el touch en celular o el mouse en el editor
@@ -28,7 +46,9 @@ public class ParallaxMenu : MonoBehaviour
         {
             if (capas[i] != null && i < multiplicadores.Length)
             {
-                Vector2 posObjetivo = offsetInput * multiplicadores[i];
+                // EL CAMBIO MAESTRO: Tomamos la posición original guardada y le sumamos el movimiento
+                Vector2 posObjetivo = posicionesIniciales[i] + (offsetInput * multiplicadores[i]);
+
                 capas[i].anchoredPosition = Vector2.Lerp(capas[i].anchoredPosition, posObjetivo, Time.deltaTime * suavizado);
             }
         }

@@ -1,135 +1,97 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using System.Collections;
 
 public class MenuManager : MonoBehaviour
 {
-    [Header("Componente Visual Base")]
-    [Tooltip("La UI Image principal que tiene el bloque completo de botones")]
+    [Header("Visual")]
     [SerializeField] private Image uiImagenMenuPrincipal;
+    [SerializeField] private Sprite spriteTodoApagado, spriteIniciarEncendido, spriteScoreEncendido;
 
-    [Header("Sprites de los Estados")]
-    [Tooltip("Imagen 1: Todos los botones apagados")]
-    [SerializeField] private Sprite spriteTodoApagado;
-    [Tooltip("Imagen 2: Botón INICIAR iluminado en magma")]
-    [SerializeField] private Sprite spriteIniciarEncendido;
-    [Tooltip("Imagen 3: Botón SCORE iluminado en magma")]
-    [SerializeField] private Sprite spriteScoreEncendido;
+    [Header("Audio")]
+    [SerializeField] private AudioSource fuenteEfectos, fuenteMusicaLobby, fuenteMusicaScore;
+    [SerializeField] private AudioClip sonidoIniciar, sonidoClickComun;
 
-    [Header("Configuración de Audio (SFX/BGM)")]
-    [SerializeField] private AudioSource fuenteEfectos;
-    [SerializeField] private AudioSource fuenteMusicaLobby;
-    [SerializeField] private AudioClip sonidoIniciar;
-    [SerializeField] private AudioClip sonidoClickComun;
-
-    [Header("Paneles de Interfaz")]
+    [Header("Secuencia de Score")]
+    [SerializeField] private VideoPlayer videoPlayerScore;
+    [SerializeField] private GameObject objetoPantallaVideo;
+    [SerializeField] private GameObject objetoTelonNegro; // Tu escudo contra clics
     [SerializeField] private GameObject panelScore;
+    [SerializeField] private ScoreManager sistemaScoreDatos;
 
     void Start()
     {
-        if (uiImagenMenuPrincipal != null && spriteTodoApagado != null)
-        {
-            uiImagenMenuPrincipal.sprite = spriteTodoApagado;
-        }
-
-        if (panelScore != null)
-        {
-            panelScore.SetActive(false);
-        }
+        if (uiImagenMenuPrincipal) uiImagenMenuPrincipal.sprite = spriteTodoApagado;
+        if (panelScore) panelScore.SetActive(false);
+        if (objetoPantallaVideo) objetoPantallaVideo.SetActive(false);
+        if (objetoTelonNegro) objetoTelonNegro.SetActive(false);
     }
 
     public void PresionarIniciar()
     {
-        if (uiImagenMenuPrincipal != null && spriteIniciarEncendido != null)
-        {
-            uiImagenMenuPrincipal.sprite = spriteIniciarEncendido;
-        }
-
+        if (uiImagenMenuPrincipal) uiImagenMenuPrincipal.sprite = spriteIniciarEncendido;
         ReproducirSFX(sonidoIniciar);
-
-        if (fuenteMusicaLobby != null)
-        {
-            StartCoroutine(FadeOutAudio(fuenteMusicaLobby, 0.4f));
-        }
-
+        if (fuenteMusicaLobby) StartCoroutine(FadeOutAudio(fuenteMusicaLobby, 0.4f));
         StartCoroutine(RetrasoCargaScene("Scene_Game", 0.4f));
     }
 
-    public void PresionarScore()
-    {
-        StartCoroutine(ManejarPulsoScore());
-    }
+    public void PresionarScore() => StartCoroutine(SecuenciaVideoScore());
 
-    IEnumerator ManejarPulsoScore()
+    IEnumerator SecuenciaVideoScore()
     {
-        if (uiImagenMenuPrincipal != null && spriteScoreEncendido != null)
-        {
-            uiImagenMenuPrincipal.sprite = spriteScoreEncendido;
-        }
-
+        if (uiImagenMenuPrincipal) uiImagenMenuPrincipal.sprite = spriteScoreEncendido;
         ReproducirSFX(sonidoClickComun);
 
+        // Activamos el telón inmediatamente para bloquear botones del menú
+        if (objetoTelonNegro) objetoTelonNegro.SetActive(true);
+
+        if (fuenteMusicaLobby) StartCoroutine(FadeOutAudio(fuenteMusicaLobby, 0.5f));
         yield return new WaitForSecondsRealtime(0.2f);
 
-        if (panelScore != null)
+        if (objetoPantallaVideo && videoPlayerScore)
         {
-            panelScore.SetActive(true);
+            objetoPantallaVideo.SetActive(true);
+            videoPlayerScore.Play();
         }
 
-        uiImagenMenuPrincipal.sprite = spriteTodoApagado;
-    }
+        yield return new WaitForSecondsRealtime(8.0f); // Duración de tu video
 
-    public void PresionarSalir()
-    {
-        ReproducirSFX(sonidoClickComun);
+        if (objetoPantallaVideo) objetoPantallaVideo.SetActive(false);
+        if (sistemaScoreDatos) sistemaScoreDatos.ActualizarPanelVisual();
+        if (panelScore) panelScore.SetActive(true);
 
-        if (fuenteMusicaLobby != null)
-        {
-            StartCoroutine(FadeOutAudio(fuenteMusicaLobby, 0.5f));
-        }
-
-        StartCoroutine(RetrasoSalida(0.5f));
+        if (uiImagenMenuPrincipal) uiImagenMenuPrincipal.sprite = spriteTodoApagado;
+        if (fuenteMusicaScore) fuenteMusicaScore.Play();
     }
 
     public void CerrarPanelScore()
     {
         ReproducirSFX(sonidoClickComun);
-        if (panelScore != null)
-        {
-            panelScore.SetActive(false);
-        }
+        if (panelScore) panelScore.SetActive(false);
+        if (objetoTelonNegro) objetoTelonNegro.SetActive(false); // Apagamos el escudo
+
+        if (fuenteMusicaScore) StartCoroutine(FadeOutAudio(fuenteMusicaScore, 0.5f));
+        if (fuenteMusicaLobby) { fuenteMusicaLobby.volume = 1f; fuenteMusicaLobby.Play(); }
     }
 
-    private void ReproducirSFX(AudioClip clip)
+    public void PresionarSalir()
     {
-        if (fuenteEfectos != null && clip != null)
-        {
-            fuenteEfectos.PlayOneShot(clip);
-        }
+        ReproducirSFX(sonidoClickComun);
+        if (fuenteMusicaLobby) StartCoroutine(FadeOutAudio(fuenteMusicaLobby, 0.5f));
+        StartCoroutine(RetrasoSalida(0.5f));
     }
 
-    IEnumerator FadeOutAudio(AudioSource audioSource, float duracion)
+    private void ReproducirSFX(AudioClip clip) { if (fuenteEfectos && clip) fuenteEfectos.PlayOneShot(clip); }
+
+    IEnumerator FadeOutAudio(AudioSource a, float d)
     {
-        float volumenInicial = audioSource.volume;
-        for (float t = 0; t < duracion; t += Time.deltaTime)
-        {
-            audioSource.volume = Mathf.Lerp(volumenInicial, 0f, t / duracion);
-            yield return null;
-        }
-        audioSource.Stop();
+        float vol = a.volume;
+        for (float t = 0; t < d; t += Time.deltaTime) { a.volume = Mathf.Lerp(vol, 0f, t / d); yield return null; }
+        a.Stop();
     }
 
-    IEnumerator RetrasoCargaScene(string nombreEscena, float tiempoEspera)
-    {
-        yield return new WaitForSecondsRealtime(tiempoEspera);
-        SceneManager.LoadScene(nombreEscena);
-    }
-
-    IEnumerator RetrasoSalida(float tiempoEspera)
-    {
-        yield return new WaitForSecondsRealtime(tiempoEspera);
-        Debug.Log("Cierre de juego limpio ejecutado.");
-        Application.Quit();
-    }
+    IEnumerator RetrasoCargaScene(string s, float t) { yield return new WaitForSecondsRealtime(t); SceneManager.LoadScene(s); }
+    IEnumerator RetrasoSalida(float t) { yield return new WaitForSecondsRealtime(t); Application.Quit(); }
 }
