@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections; // VITAL: Necesario para que funcione el tiempo de parpadeo (Corrutinas)
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,44 +17,42 @@ public class PlayerController : MonoBehaviour
 
     [Header("HUD (Interfaz en Pantalla)")]
     [SerializeField] private Text textoScore;
-    [SerializeField] private Text textoVidas;
+    // NUEVO: Array para guardar los 3 corazones visuales
+    [SerializeField] private GameObject[] iconosCorazones;
 
     [Header("Sistemas de Game Over y Sonido")]
     [SerializeField] private GameOverManager managerGameOver;
     [SerializeField] private AudioSource fuenteSFX_Dragon;
     [SerializeField] private AudioClip[] sonidosDeGolpe;
-    [SerializeField] private AudioClip[] sonidosDeComida; // NUEVO: Array para tus 3 sonidos de comida
+    [SerializeField] private AudioClip[] sonidosDeComida;
 
     private Animator anim;
-    private SpriteRenderer spriteDragon; // NUEVO: Controla la visibilidad para el parpadeo
+    private SpriteRenderer spriteDragon;
     private int score = 0;
     private bool juegoTerminado = false;
-    private bool esInvulnerable = false; // NUEVO: Bloquea el daño repetido
+    private bool esInvulnerable = false;
     private float movimientoInput;
 
     void Start()
     {
         Time.timeScale = 1f;
         anim = GetComponent<Animator>();
-        spriteDragon = GetComponent<SpriteRenderer>(); // Capturamos el gráfico del dragón
+        spriteDragon = GetComponent<SpriteRenderer>();
 
-        // Forzamos la escala a 1 para evitar que las animaciones viejas lo achiquen
         transform.localScale = Vector3.one;
 
-        // Inicializar UI del HUD
         if (textoScore != null) textoScore.text = "SCORE: 0";
-        if (textoVidas != null) textoVidas.text = "VIDAS: " + vidas;
+        // Actualizamos los corazones visuales al iniciar
+        ActualizarHUDCorazones();
 
-        if (anim == null) Debug.LogError("¡Falta el componente Animator en el objeto Dragon!");
-        if (spriteDragon == null) Debug.LogError("¡Falta el componente SpriteRenderer en el Dragón!");
+        if (anim == null) Debug.LogError("¡Falta el componente Animator!");
+        if (spriteDragon == null) Debug.LogError("¡Falta el componente SpriteRenderer!");
     }
 
     void Update()
     {
-        // Si el juego terminó, congelamos el movimiento del dragón inmediatamente
         if (juegoTerminado) return;
 
-        // 1. CAPTURAR INPUT (Híbrido: Teclado + Pantalla Táctil)
         movimientoInput = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetMouseButton(0))
@@ -64,13 +62,11 @@ public class PlayerController : MonoBehaviour
             else movimientoInput = 1f;
         }
 
-        // 2. MOVIMIENTO FÍSICO
         transform.Translate(Vector3.right * movimientoInput * velocidadHorizontal * Time.deltaTime, Space.World);
 
         float clampX = Mathf.Clamp(transform.position.x, -limiteX, limiteX);
         transform.position = new Vector3(clampX, transform.position.y, transform.position.z);
 
-        // 3. ANIMACIÓN Y BLEND TREE
         if (anim != null)
         {
             float valorActual = anim.GetFloat("DireccionX");
@@ -78,12 +74,10 @@ public class PlayerController : MonoBehaviour
             anim.SetFloat("DireccionX", nuevoValor);
         }
 
-        // 4. ROTACIÓN VISUAL (BANKING)
         float rotacionZ = -movimientoInput * anguloDeInclinacion;
         Quaternion targetRotation = Quaternion.Euler(0, 0, rotacionZ);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * suavizadoAnimacion);
 
-        // 5. LÓGICA DE SUPERVIVENCIA
         energia -= desgasteEnergia * Time.deltaTime;
         if (energia <= 0) Morir();
     }
@@ -99,19 +93,17 @@ public class PlayerController : MonoBehaviour
             if (textoScore != null) textoScore.text = "SCORE: " + score;
             colision.gameObject.SetActive(false);
 
-            // LLAMADA AL SONIDO DE COMIDA
             ReproducirSonidoAleatorio(sonidosDeComida);
         }
         else if (colision.CompareTag("Obstaculo"))
         {
-            // Si el dragón es invulnerable por un golpe reciente, cancelamos el daño
             if (esInvulnerable) return;
 
             vidas--;
-            if (textoVidas != null) textoVidas.text = "VIDAS: " + vidas;
-            colision.gameObject.SetActive(false);
+            // NUEVO: Llamamos a la función que apaga un corazón
+            ActualizarHUDCorazones();
 
-            // LLAMADA AL SONIDO DE GOLPE
+            colision.gameObject.SetActive(false);
             ReproducirSonidoAleatorio(sonidosDeGolpe);
 
             if (vidas <= 0)
@@ -120,13 +112,24 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                // Si sobrevive, activamos la rutina de parpadeo e inmunidad
                 StartCoroutine(RutinaInvulnerabilidad());
             }
         }
     }
 
-    // NUEVO: Función inteligente que recibe cualquier lista de sonidos y reproduce uno al azar
+    // NUEVO: Función que revisa cuántas vidas tienes y apaga/prende los corazones
+    private void ActualizarHUDCorazones()
+    {
+        for (int i = 0; i < iconosCorazones.Length; i++)
+        {
+            // Si el índice del corazón es menor a las vidas, se enciende. Si no, se apaga.
+            if (i < vidas)
+                iconosCorazones[i].SetActive(true);
+            else
+                iconosCorazones[i].SetActive(false);
+        }
+    }
+
     private void ReproducirSonidoAleatorio(AudioClip[] listaDeSonidos)
     {
         if (listaDeSonidos != null && listaDeSonidos.Length > 0 && fuenteSFX_Dragon != null)
@@ -136,12 +139,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // NUEVO: Rutina de tiempo real para el parpadeo
     IEnumerator RutinaInvulnerabilidad()
     {
         esInvulnerable = true;
-
-        // Bucle que apaga y prende el gráfico del dragón 5 veces (efecto Arcade clásico)
         for (int i = 0; i < 5; i++)
         {
             if (spriteDragon != null) spriteDragon.enabled = false;
@@ -150,22 +150,16 @@ public class PlayerController : MonoBehaviour
             if (spriteDragon != null) spriteDragon.enabled = true;
             yield return new WaitForSeconds(0.15f);
         }
-
-        esInvulnerable = false; // Al terminar el bucle, vuelve a ser vulnerable
+        esInvulnerable = false;
     }
 
     void Morir()
     {
         juegoTerminado = true;
+        // Apagamos todos los corazones por si acaso
+        vidas = 0;
+        ActualizarHUDCorazones();
 
-        // El GameOverManager ahora se encarga de pausar el tiempo, poner el video y la música
-        if (managerGameOver != null)
-        {
-            managerGameOver.DispararGameOver(score);
-        }
-        else
-        {
-            Debug.LogError("¡ATENCIÓN! Falta asignar el GameManager en el slot del Dragón.");
-        }
+        if (managerGameOver != null) managerGameOver.DispararGameOver(score);
     }
 }
