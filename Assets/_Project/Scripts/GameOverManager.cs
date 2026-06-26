@@ -7,13 +7,14 @@ public class GameOverManager : MonoBehaviour
 {
     [Header("UI de Game Over")]
     [SerializeField] private GameObject panelGameOver;
+    [SerializeField] private GameObject hudEnJuego;
     [SerializeField] private TextMeshProUGUI textoPuntajeFinal;
     [SerializeField] private TMP_InputField inputIniciales;
 
     [Header("Multimedia de Derrota")]
     [SerializeField] private VideoPlayer videoFondo;
-    [SerializeField] private AudioSource audioSourceBGM_Juego; // La música normal del nivel
-    [SerializeField] private AudioSource audioSourceBGM_GameOver; // Tu música épica de derrota
+    [SerializeField] private AudioSource audioSourceBGM_Juego;
+    [SerializeField] private AudioSource audioSourceBGM_GameOver;
 
     private int puntajeLogrado = 0;
 
@@ -26,18 +27,32 @@ public class GameOverManager : MonoBehaviour
     public void DispararGameOver(int puntajeFinal)
     {
         puntajeLogrado = puntajeFinal;
-        textoPuntajeFinal.text = "SCORE: " + puntajeFinal.ToString();
 
-        // 1. Congelamos el tiempo (Criterio de Rúbrica)
+        // Seguro para evitar el error NullReferenceException
+        if (textoPuntajeFinal != null)
+        {
+            textoPuntajeFinal.text = "SCORE: " + puntajeFinal.ToString();
+        }
+
+        // 1. Congelamos el tiempo
         Time.timeScale = 0f;
 
         // 2. Apagamos la música alegre y ponemos la de derrota
         if (audioSourceBGM_Juego != null) audioSourceBGM_Juego.Stop();
         if (audioSourceBGM_GameOver != null) audioSourceBGM_GameOver.Play();
 
-        // 3. Encendemos el panel y el video en loop
-        panelGameOver.SetActive(true);
+        // 3. Encendemos el panel, APAGAMOS EL HUD y encendemos el video
+        if (panelGameOver != null) panelGameOver.SetActive(true);
+        if (hudEnJuego != null) hudEnJuego.SetActive(false);
         if (videoFondo != null) videoFondo.Play();
+
+        // 4. ¡EL TRUCO MÁGICO DE UX!
+        // Forzamos a Unity a seleccionar la caja de texto automáticamente
+        if (inputIniciales != null)
+        {
+            inputIniciales.Select(); // Lo enfoca en el sistema de eventos
+            inputIniciales.ActivateInputField(); // Activa el cursor parpadeante
+        }
     }
 
     // Esta función va en el OnClick() del Botón "Guardar"
