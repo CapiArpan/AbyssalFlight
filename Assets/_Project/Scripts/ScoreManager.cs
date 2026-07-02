@@ -25,7 +25,6 @@ public class ScoreManager : MonoBehaviour
     [Header("Configuración de Filas")]
     [SerializeField] private FilaUI[] filas;
 
-    // Esta es la función que debe llamar tu botón
     public void IniciarSecuencia()
     {
         gameObject.SetActive(true);
@@ -59,8 +58,11 @@ public class ScoreManager : MonoBehaviour
             videoPlayer.gameObject.SetActive(false);
         }
 
-        // 2. Encendemos el CanvasGroup (ahora invisible porque las filas están apagadas)
+        // 2. Encendemos el CanvasGroup
         grupoUI.alpha = 1f;
+
+        // LISTA DE SUFIJOS CORREGIDA (1ST, 2ND, 3RD, 4TH, 5TH)
+        string[] sufijos = new string[] { "ST", "ND", "RD", "TH", "TH" };
 
         // 3. Revelar fila por fila con Efecto Arcade
         for (int i = 0; i < filas.Length; i++)
@@ -70,15 +72,21 @@ public class ScoreManager : MonoBehaviour
 
             // Obtener datos guardados
             int puntosFinales = PlayerPrefs.GetInt("HighScoreValue_" + i, 0);
-            filas[i].rank.text = (i + 1).ToString() + "ST"; // Ajusta a ND, RD, TH si prefieres
-            filas[i].name.text = PlayerPrefs.GetString("HighScoreName_" + i, "---");
-            filas[i].score.text = "0"; // Inicia en 0 para el contador
+            string nombreGuardado = PlayerPrefs.GetString("HighScoreName_" + i, "---");
+
+            // Aplicamos los sufijos dinámicamente según el lugar que ocupan (0, 1, 2, 3 o 4)
+            filas[i].rank.text = (i + 1).ToString() + sufijos[i];
+            filas[i].name.text = nombreGuardado;
+            filas[i].score.text = "0";
 
             // Sonido de golpe mecánico
             if (audioSource && clipClick) audioSource.PlayOneShot(clipClick);
 
-            // Iniciar el contador rápido de puntos
-            StartCoroutine(ContarPuntos(filas[i].score, puntosFinales));
+            // Iniciar el contador rápido de puntos (solo si hay más de 0)
+            if (puntosFinales > 0)
+            {
+                StartCoroutine(ContarPuntos(filas[i].score, puntosFinales));
+            }
 
             // Efecto visual: Escala de 0.8 a 1.0 suavemente
             float t = 0;

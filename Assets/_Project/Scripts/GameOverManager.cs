@@ -13,7 +13,7 @@ public class GameOverManager : MonoBehaviour
 
     [Header("Multimedia de Derrota")]
     [SerializeField] private VideoPlayer videoFondo;
-    [SerializeField] private AudioSource audioSourceBGM_Juego;
+    [SerializeField] private AudioSource[] fuentesAudioJuego;
     [SerializeField] private AudioSource audioSourceBGM_GameOver;
 
     private int puntajeLogrado = 0;
@@ -23,12 +23,10 @@ public class GameOverManager : MonoBehaviour
         if (panelGameOver != null) panelGameOver.SetActive(false);
     }
 
-    // Llama a esta función desde tu Player cuando las vidas lleguen a 0
     public void DispararGameOver(int puntajeFinal)
     {
         puntajeLogrado = puntajeFinal;
 
-        // Seguro para evitar el error NullReferenceException
         if (textoPuntajeFinal != null)
         {
             textoPuntajeFinal.text = "SCORE: " + puntajeFinal.ToString();
@@ -37,8 +35,16 @@ public class GameOverManager : MonoBehaviour
         // 1. Congelamos el tiempo
         Time.timeScale = 0f;
 
-        // 2. Apagamos la música alegre y ponemos la de derrota
-        if (audioSourceBGM_Juego != null) audioSourceBGM_Juego.Stop();
+        // 2. Apagamos TODOS los audios del juego (Música y Ambiente)
+        if (fuentesAudioJuego != null)
+        {
+            foreach (AudioSource fuente in fuentesAudioJuego)
+            {
+                if (fuente != null) fuente.Stop();
+            }
+        }
+
+        // Ponemos la música de derrota
         if (audioSourceBGM_GameOver != null) audioSourceBGM_GameOver.Play();
 
         // 3. Encendemos el panel, APAGAMOS EL HUD y encendemos el video
@@ -46,61 +52,54 @@ public class GameOverManager : MonoBehaviour
         if (hudEnJuego != null) hudEnJuego.SetActive(false);
         if (videoFondo != null) videoFondo.Play();
 
-        // 4. ¡EL TRUCO MÁGICO DE UX!
-        // Forzamos a Unity a seleccionar la caja de texto automáticamente
+        // 4. Truco de UX
         if (inputIniciales != null)
         {
-            inputIniciales.Select(); // Lo enfoca en el sistema de eventos
-            inputIniciales.ActivateInputField(); // Activa el cursor parpadeante
+            inputIniciales.Select();
+            inputIniciales.ActivateInputField();
         }
     }
 
-    // Esta función va en el OnClick() del Botón "Guardar"
+    // --- BOTÓN 1: EL QUE YA TENÍAS (Guarda el récord y va al menú) ---
     public void BotonGuardarYSalir()
     {
-        // Forzamos a mayúsculas y tomamos máximo 3 letras
         string iniciales = inputIniciales.text.Length >= 3 ? inputIniciales.text.Substring(0, 3) : "AAA";
         iniciales = iniciales.ToUpper();
 
-        // Usamos la misma lógica del ScoreManager para guardar directo en la memoria
         EvaluarYGuardar(puntajeLogrado, iniciales);
 
-        // Descongelamos el tiempo y volvemos al menú
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Scene_Menu"); // PON EL NOMBRE EXACTO DE TU ESCENA DE MENÚ AQUÍ
+        SceneManager.LoadScene("Scene_Menu");
     }
 
-    // Lógica interna para guardar sin necesitar el ScoreManager en esta escena
+    // --- BOTÓN 2: EL NUEVO (Reintenta rápido sin guardar nada) ---
+    public void BotonReintentar()
+    {
+        // Vital: Descongelamos el tiempo para que el juego no empiece pausado
+        Time.timeScale = 1f;
+
+        // Recargamos la escena de juego. (Asegúrate de que tu escena se llame "Scene_Game")
+        SceneManager.LoadScene("Scene_Game");
+    }
+
     private void EvaluarYGuardar(int nuevoScore, string nombre)
     {
-        int[] topScores = new int[5];
-        string[] topNames = new string[5];
-
         for (int i = 0; i < 5; i++)
         {
-            topScores[i] = PlayerPrefs.GetInt("HighScoreValue_" + i, 0);
-            topNames[i] = PlayerPrefs.GetString("HighScoreName_" + i, "---");
-        }
-
-        for (int i = 0; i < 5; i++)
-        {
-            if (nuevoScore > topScores[i])
+            if (nuevoScore > PlayerPrefs.GetInt("HighScoreValue_" + i, 0))
             {
+                // Desplazamos hacia abajo para no perder a los que estaban antes
                 for (int j = 4; j > i; j--)
                 {
-                    topScores[j] = topScores[j - 1];
-                    topNames[j] = topNames[j - 1];
+                    PlayerPrefs.SetInt("HighScoreValue_" + j, PlayerPrefs.GetInt("HighScoreValue_" + (j - 1), 0));
+                    PlayerPrefs.SetString("HighScoreName_" + j, PlayerPrefs.GetString("HighScoreName_" + (j - 1), "---"));
                 }
-                topScores[i] = nuevoScore;
-                topNames[i] = nombre;
+
+                // Guardamos el nuevo en su lugar correspondiente
+                PlayerPrefs.SetInt("HighScoreValue_" + i, nuevoScore);
+                PlayerPrefs.SetString("HighScoreName_" + i, nombre);
                 break;
             }
-        }
-
-        for (int i = 0; i < 5; i++)
-        {
-            PlayerPrefs.SetInt("HighScoreValue_" + i, topScores[i]);
-            PlayerPrefs.SetString("HighScoreName_" + i, topNames[i]);
         }
         PlayerPrefs.Save();
     }

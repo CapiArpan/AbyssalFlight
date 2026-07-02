@@ -150,7 +150,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.7502236, y: 1.5}
+    oldSize: {x: 1.7068056, y: 0.9309091}
     newSize: {x: 44.00358, y: 24}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -171,4 +171,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1b4240fc74ea524f91202c22607227e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadCaida: 9
+  velocidadCaida: 19
+  balancearAlCaer: 1
+  amplitudBalanceo: 0.4
+  velocidadBalanceo: 3
+  rotacionAleatoria: 1
+  anguloMaximoInclinacion: 12
+  catalogoVisual:
+  - nombreReferencia: 1
+    framesDeCaida:
+    - {fileID: 21300000, guid: e60cddafec99c6140ab29554deb96a0b, type: 3}
+    - {fileID: 21300000, guid: 0e678d168dea64f4bb300a8d074c5d33, type: 3}
+    - {fileID: 21300000, guid: 3cb2b1f70ec7bc744a26dbae28785751, type: 3}
+  - nombreReferencia: 2
+    framesDeCaida:
+    - {fileID: 21300000, guid: 333c43d64e43c64428ea469f49f281b2, type: 3}
+    - {fileID: 21300000, guid: 4c2519f322af1964fb2f33e8b877cfc5, type: 3}
+    - {fileID: 21300000, guid: c68ef35f3d5eae64d88c0f097e90f3b8, type: 3}
+  - nombreReferencia: 3
+    framesDeCaida:
+    - {fileID: 21300000, guid: f6137d4c53d36b949a852a667e956675, type: 3}
+    - {fileID: 21300000, guid: 6abdc6277a6f4d14da0577958302bdd0, type: 3}
+    - {fileID: 21300000, guid: 409b28e557e4f7043b046f691681c20a, type: 3}
+  - nombreReferencia: 4
+    framesDeCaida:
+    - {fileID: 21300000, guid: 41344bfa0b61c53478a1607766668135, type: 3}
+    - {fileID: 21300000, guid: 42a3e95143c367c438cb65112eac2538, type: 3}
+    - {fileID: 21300000, guid: 4825ed4c58494584084acd933eb4fa92, type: 3}
+  - nombreReferencia: 5
+    framesDeCaida:
+    - {fileID: 21300000, guid: 106be9958791e3241b7c0e8d46db8a82, type: 3}
+    - {fileID: 21300000, guid: 371ec2c21e4b43f41a2758741887686a, type: 3}
+    - {fileID: 21300000, guid: 6b49197404a7d4c4999cb61742350ebd, type: 3}
+  - nombreReferencia: 6
+    framesDeCaida:
+    - {fileID: 21300000, guid: 01b65b60510706e4c9c34337ec95374d, type: 3}
+    - {fileID: 21300000, guid: d68a57f88fe267a45bf64d1e5507fff1, type: 3}
+    - {fileID: 21300000, guid: b81cf5a20b379274caa6bcc9780ae6d3, type: 3}
+  - nombreReferencia: 7
+    framesDeCaida:
+    - {fileID: 21300000, guid: 1466bf8f153fe1d48b0768a7b6951379, type: 3}
+    - {fileID: 21300000, guid: af8239ba3ad3a4c4c99cc965ee3d1d60, type: 3}
+    - {fileID: 21300000, guid: 904e75b8a2a62d44f9740c500823547a, type: 3}
+  - nombreReferencia: 8
+    framesDeCaida:
+    - {fileID: 21300000, guid: 5c9fc1916df2be64bb3c48e112875de6, type: 3}
+    - {fileID: 21300000, guid: 5983331be1f3ae24f83db5a636dbae37, type: 3}
+    - {fileID: 21300000, guid: eb54d7c8863992d48aa076edf20f2023, type: 3}
+  - nombreReferencia: 9
+    framesDeCaida:
+    - {fileID: 21300000, guid: f1b12af02c0e37241a36690e6681e127, type: 3}
+    - {fileID: 21300000, guid: ca66c3d9bcfb9134d8c312250fce702c, type: 3}
+    - {fileID: 21300000, guid: 7c21e99cddcb2e4419333a21b07371fc, type: 3}
+  - nombreReferencia: 10
+    framesDeCaida:
+    - {fileID: 21300000, guid: 086b22432f24ef247b0efb200e3630eb, type: 3}
+    - {fileID: 21300000, guid: 960ce56bc679e23498012c562173361d, type: 3}
+    - {fileID: 21300000, guid: 5e49d3032b5d41f4abb54c00653037e0, type: 3}
+  distanciaPorFrame: 2.1
+  animacionEnBucle: 0

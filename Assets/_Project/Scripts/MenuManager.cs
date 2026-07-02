@@ -21,7 +21,7 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("¡ERROR FATAL! No se encontró el script ScoreManager. Asegúrate de que está adjunto al Panel de Score.");
+            Debug.LogError("¡ERROR FATAL! No se encontró el script ScoreManager. Asegúrate de que esté adjunto al Panel de Score.");
         }
     }
 
@@ -31,5 +31,15 @@ public class MenuManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(t);
         SceneManager.LoadScene(s);
+    }
+
+    // --- NUEVA FUNCIÓN PARA EL BOTÓN DE SALIR ---
+    public void PresionarSalir()
+    {
+        // Este mensaje aparecerá en la consola de Unity para que sepas que el botón sí funciona
+        Debug.Log("¡El jugador ha cerrado el juego!");
+
+        // Esta orden es la que cerrará el juego real una vez que lo exportes (.exe / APK)
+        Application.Quit();
     }
 }
