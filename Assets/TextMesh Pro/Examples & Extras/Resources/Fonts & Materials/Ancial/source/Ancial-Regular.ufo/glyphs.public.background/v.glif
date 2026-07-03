@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="v" format="2">
+	<advance width="367"/>
+	<outline>
+		<component base="V" xScale="0.5734" yScale="0.5734" xOffset="13"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.glyph.userData</key>
+			<dict>
+				<key>KernOnName</key>
+				<string>v</string>
+			</dict>
+		</dict>
+	</lib>
+</glyph>

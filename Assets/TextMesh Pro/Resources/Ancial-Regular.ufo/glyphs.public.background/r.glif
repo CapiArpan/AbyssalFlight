@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="r" format="2">
+	<advance width="313"/>
+	<outline>
+		<component base="R" xScale="0.5671" yScale="0.5671" xOffset="1"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.glyph.userData</key>
+			<dict>
+				<key>KernOnName</key>
+				<string>r</string>
+			</dict>
+		</dict>
+	</lib>
+</glyph>

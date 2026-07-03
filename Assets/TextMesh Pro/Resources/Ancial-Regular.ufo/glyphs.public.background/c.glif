@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="c" format="2">
+	<advance width="355"/>
+	<outline>
+		<component base="C" xScale="0.6153" yScale="0.5979" xOffset="-4"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.glyph.userData</key>
+			<dict>
+				<key>KernOnName</key>
+				<string>c</string>
+			</dict>
+		</dict>
+	</lib>
+</glyph>

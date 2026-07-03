@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="backslash" format="2">
+	<advance width="382"/>
+	<unicode hex="005C"/>
+	<outline>
+		<contour>
+			<point x="38" y="722" type="curve"/>
+			<point x="15" y="719"/>
+			<point x="10" y="709"/>
+			<point x="10" y="694" type="curve" smooth="yes"/>
+			<point x="10" y="672"/>
+			<point x="27" y="641"/>
+			<point x="35" y="616" type="curve" smooth="yes"/>
+			<point x="41" y="597"/>
+			<point x="41" y="579"/>
+			<point x="50" y="561" type="curve" smooth="yes"/>
+			<point x="79" y="505"/>
+			<point x="117" y="459"/>
+			<point x="139" y="401" type="curve" smooth="yes"/>
+			<point x="146" y="383"/>
+			<point x="146" y="364"/>
+			<point x="151" y="346" type="curve" smooth="yes"/>
+			<point x="161" y="314"/>
+			<point x="179" y="289"/>
+			<point x="191" y="259" type="curve" smooth="yes"/>
+			<point x="200" y="238"/>
+			<point x="202" y="218"/>
+			<point x="212" y="198" type="curve" smooth="yes"/>
+			<point x="227" y="168"/>
+			<point x="285" y="-2"/>
+			<point x="352" y="-35" type="curve" smooth="yes"/>
+			<point x="355" y="-37"/>
+			<point x="361" y="-26"/>
+			<point x="364" y="-25" type="curve"/>
+			<point x="370" y="-20"/>
+			<point x="372" y="-13"/>
+			<point x="372" y="-3" type="curve" smooth="yes"/>
+			<point x="372" y="17"/>
+			<point x="360" y="46"/>
+			<point x="357" y="60" type="curve" smooth="yes"/>
+			<point x="347" y="103"/>
+			<point x="328" y="139"/>
+			<point x="306" y="178" type="curve" smooth="yes"/>
+			<point x="299" y="190"/>
+			<point x="283" y="207"/>
+			<point x="281" y="221" type="curve" smooth="yes"/>
+			<point x="274" y="267"/>
+			<point x="229" y="301"/>
+			<point x="219" y="345" type="curve" smooth="yes"/>
+			<point x="206" y="402"/>
+			<point x="182" y="453"/>
+			<point x="159" y="506" type="curve" smooth="yes"/>
+			<point x="158" y="508"/>
+			<point x="158" y="510"/>
+			<point x="158" y="512" type="curve" smooth="yes"/>
+			<point x="158" y="518" type="line" smooth="yes"/>
+			<point x="158" y="521"/>
+			<point x="158" y="526"/>
+			<point x="155" y="531" type="curve" smooth="yes"/>
+			<point x="137" y="568"/>
+			<point x="114" y="602"/>
+			<point x="98" y="639" type="curve" smooth="yes"/>
+			<point x="90" y="657"/>
+			<point x="90" y="680"/>
+			<point x="79" y="696" type="curve" smooth="yes"/>
+			<point x="71" y="708"/>
+			<point x="49" y="714"/>
+		</contour>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.hugojourdan.ColorFlow</key>
+			<dict>
+				<key>0</key>
+				<integer>0</integer>
+				<key>1</key>
+				<integer>0</integer>
+				<key>10</key>
+				<integer>0</integer>
+				<key>11</key>
+				<integer>0</integer>
+				<key>2</key>
+				<integer>0</integer>
+				<key>3</key>
+				<integer>0</integer>
+				<key>4</key>
+				<integer>0</integer>
+				<key>5</key>
+				<integer>0</integer>
+				<key>6</key>
+				<integer>0</integer>
+				<key>7</key>
+				<integer>0</integer>
+				<key>8</key>
+				<integer>0</integer>
+				<key>9</key>
+				<integer>0</integer>
+			</dict>
+			<key>com.schriftgestaltung.glyph.userData</key>
+			<dict>
+				<key>KernOnSpecialSpacing</key>
+				<dict>
+					<key>L</key>
+					<string>spaced-off</string>
+					<key>R</key>
+					<string>spaced-off</string>
+				</dict>
+			</dict>
+		</dict>
+	</lib>
+</glyph>

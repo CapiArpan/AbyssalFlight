@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>lib</key>
+	<dict>
+		<key>GSOffsetHorizontal</key>
+		<integer>4</integer>
+		<key>GSOffsetVertical</key>
+		<integer>4</integer>
+		<key>KernOnIndependentPairs</key>
+		<array>
+			<string>A A</string>
+			<string>X A</string>
+		</array>
+		<key>KernOnModels</key>
+		<array>
+			<string>A V</string>
+			<string>t quotedbl</string>
+			<string>a v</string>
+			<string>T O</string>
+			<string>L E</string>
+			<string>A D</string>
+			<string>l l</string>
+			<string>Z i</string>
+			<string>p i</string>
+			<string>a j</string>
+			<string>s n</string>
+			<string>p p</string>
+			<string>O s</string>
+			<string>U n</string>
+			<string>f e</string>
+			<string>f f</string>
+			<string>c c</string>
+			<string>f t</string>
+			<string>t p</string>
+			<string>C l</string>
+			<string>g j</string>
+			<string>s s</string>
+			<string>r s</string>
+			<string>y u</string>
+			<string>o t</string>
+			<string>n n</string>
+			<string>O u</string>
+			<string>P C</string>
+			<string>S T</string>
+			<string>Z Z</string>
+			<string>M A</string>
+			<string>B u</string>
+			<string>g s</string>
+			<string>g g</string>
+			<string>y t</string>
+			<string>H s</string>
+			<string>I A</string>
+			<string>W A</string>
+			<string>O H</string>
+		</array>
+	</dict>
+</dict>
+</plist>

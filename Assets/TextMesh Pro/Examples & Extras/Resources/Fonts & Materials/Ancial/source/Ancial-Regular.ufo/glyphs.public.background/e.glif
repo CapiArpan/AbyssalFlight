@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="e" format="2">
+	<advance width="340"/>
+	<outline>
+		<component base="E" xScale="0.563" yScale="0.563" xOffset="5"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.glyph.userData</key>
+			<dict>
+				<key>KernOnName</key>
+				<string>e</string>
+			</dict>
+		</dict>
+	</lib>
+</glyph>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<glyph name="u" format="2">
+	<advance width="329"/>
+	<outline>
+		<component base="U" xScale="0.5818" yScale="0.5818" xOffset="9"/>
+	</outline>
+	<lib>
+		<dict>
+			<key>com.schriftgestaltung.glyph.userData</key>
+			<dict>
+				<key>KernOnName</key>
+				<string>u</string>
+			</dict>
+		</dict>
+	</lib>
+</glyph>

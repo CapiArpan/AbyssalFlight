@@ -171,12 +171,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1b4240fc74ea524f91202c22607227e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadCaida: 19
+  velocidadCaida: 9
   balancearAlCaer: 1
-  amplitudBalanceo: 0.4
-  velocidadBalanceo: 3
+  amplitudBalanceo: 1.9
+  velocidadBalanceo: 1.7
   rotacionAleatoria: 1
-  anguloMaximoInclinacion: 12
+  anguloMaximoInclinacion: 20
   catalogoVisual:
   - nombreReferencia: 1
     framesDeCaida:
@@ -228,5 +228,5 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 086b22432f24ef247b0efb200e3630eb, type: 3}
     - {fileID: 21300000, guid: 960ce56bc679e23498012c562173361d, type: 3}
     - {fileID: 21300000, guid: 5e49d3032b5d41f4abb54c00653037e0, type: 3}
-  distanciaPorFrame: 2.1
-  animacionEnBucle: 0
+  distanciaPorFrame: 5
+  animacionEnBucle: 1
