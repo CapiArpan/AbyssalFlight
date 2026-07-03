@@ -994,6 +994,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelCarga: {fileID: 0}
   textoPorcentaje: {fileID: 0}
+  botonFotoContinuar: {fileID: 0}
 --- !u!114 &420113223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2221,6 +2222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelCarga: {fileID: 1221751520}
   textoPorcentaje: {fileID: 1959496718}
+  botonFotoContinuar: {fileID: 1876614786}
 --- !u!1 &786305915
 GameObject:
   m_ObjectHideFlags: 0
@@ -3063,16 +3065,17 @@ RectTransform:
   m_GameObject: {fileID: 1221751520}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.0884, y: 1.3319294, z: 1.0884}
+  m_LocalScale: {x: 1.06119, y: 1.4318242, z: 1.0884}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1738061718}
   - {fileID: 1959496717}
+  - {fileID: 1876614791}
   m_Father: {fileID: 746460604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -153}
+  m_AnchoredPosition: {x: 0.1907959, y: -119}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1221751522
@@ -3088,7 +3091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 1}
+  m_Color: {r: 0.5943396, g: 0.55789423, b: 0.55789423, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4174,14 +4177,14 @@ RectTransform:
   m_GameObject: {fileID: 1738061717}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.8802676, y: 7.5230856, z: 4.3380156}
+  m_LocalScale: {x: 4.707262, y: 5.3520975, z: 4.184233}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1221751521}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 66, y: 205}
+  m_AnchoredPosition: {x: 93, y: 187}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1738061719
@@ -4204,12 +4207,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "ETERNIDAD DIGESTIVA\n\n\"No hay salida, solo el ritmo constante de las
-    entra\xF1as. \nLa bestia se alimenta, y t\xFA eres parte de su ciclo eterno.\n
-    El drag\xF3n vuela, los hombres caen, y la carne se convierte en puntuaci\xF3n.
-    El loop no tiene fin, pues la bestia nunca sacia su hambre.\"\n\n\u2022 DEVORA
-    a los desarmados para prolongar tu tormento.\n\u2022 ESQUIVA a los que portan
-    acero: la carne se resiste.\n\u2022 SOBREVIVE. La salida es un espejismo.\""
+  m_text: "ETERNIDAD DIGESTIVA\n\nNo hay salida, solo el ritmo constante de las entra\xF1as.
+    \nLa bestia se alimenta, y t\xFA eres parte de su ciclo eterno.\n El drag\xF3n
+    vuela, los hombres caen, y la carne se convierte en puntuaci\xF3n. El loop no
+    tiene fin, pues la bestia nunca sacia su hambre.\n\n\u2022 DEVORA a los desarmados
+    para prolongar tu tormento.\n\u2022 ESQUIVA a los que portan acero: la carne
+    se resiste.\n\u2022 SOBREVIVE. La salida es un espejismo."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0aa6ef5130acb324abdb78864d10edf6, type: 2}
   m_sharedMaterial: {fileID: 9215613954104063547, guid: 0aa6ef5130acb324abdb78864d10edf6, type: 2}
@@ -4218,8 +4221,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4290179839
-  m_fontColor: {r: 1, g: 0.94903195, b: 0.7122642, a: 1}
+    rgba: 4284465407
+  m_fontColor: {r: 1, g: 0.7512013, b: 0.3726415, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4242,15 +4245,15 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 33
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: -1
-  m_wordSpacing: 16
-  m_lineSpacing: -2
+  m_characterSpacing: 6
+  m_wordSpacing: 0
+  m_lineSpacing: -30
   m_lineSpacingMax: 0
-  m_paragraphSpacing: -30
+  m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
@@ -4272,7 +4275,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -13.112007, y: -17.536575, z: 14.344185, w: -33.513542}
+  m_margin: {x: -13.112007, y: -17.536575, z: 22.682732, w: -33.513542}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -4433,6 +4436,153 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1786393895}
   m_CullTransparentMesh: 1
+--- !u!1 &1876614786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1876614791}
+  - component: {fileID: 1876614790}
+  - component: {fileID: 1876614789}
+  - component: {fileID: 1876614788}
+  - component: {fileID: 1876614787}
+  m_Layer: 5
+  m_Name: Boton_Foto_Continuar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1876614787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876614786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6fb29bc202e2334c88d5decd79f4130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocidadLatido: 3
+  magnitudLatido: 0.2
+--- !u!114 &1876614788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876614786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1876614789}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 746460607}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
+        m_MethodName: ConfirmarDescenso
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1876614789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876614786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: d39b5d7bccdcb614fb6d0cbab6d49bd4, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1876614790
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876614786}
+  m_CullTransparentMesh: 1
+--- !u!224 &1876614791
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876614786}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.645663, y: 0.5811032, z: 0.645663}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1221751521}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -214, y: -433}
+  m_SizeDelta: {x: 403, y: 522}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1959496716
 GameObject:
   m_ObjectHideFlags: 0
@@ -4490,7 +4640,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Cargando...  0%
+  m_text: Comiendo...  0%
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0aa6ef5130acb324abdb78864d10edf6, type: 2}
   m_sharedMaterial: {fileID: 9215613954104063547, guid: 0aa6ef5130acb324abdb78864d10edf6, type: 2}
@@ -4517,14 +4667,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -4553,7 +4703,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -10.7285, w: 21.79453}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

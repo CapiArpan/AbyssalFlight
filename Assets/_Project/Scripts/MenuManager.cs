@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using TMPro; // Vital para poder usar la tipografía TextMeshPro
+using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
@@ -10,30 +10,25 @@ public class MenuManager : MonoBehaviour
     [Header("UI de Pantalla de Carga")]
     [SerializeField] private GameObject panelCarga;
     [SerializeField] private TextMeshProUGUI textoPorcentaje;
+    [SerializeField] private GameObject botonFotoContinuar; // <- AQUÍ VA TU FOTO/BOTÓN
+
+    private bool autorizacionParaDescender = false; // Seguro para no cambiar de escena
 
     void Awake()
     {
-        // Esto busca el ScoreManager sin importar donde esté en el Canvas
-        // 'true' le dice a Unity: "aunque esté desactivado, encuéntralo igual"
         sistemaScoreDatos = GetComponentInChildren<ScoreManager>(true);
 
-        // Seguridad: Nos aseguramos de que el panel de carga empiece apagado al abrir el juego
+        // Seguridad: Apagamos todo lo de la carga al iniciar el juego
         if (panelCarga != null) panelCarga.SetActive(false);
+        if (botonFotoContinuar != null) botonFotoContinuar.SetActive(false);
     }
 
     public void PresionarScore()
     {
-        if (sistemaScoreDatos != null)
-        {
-            sistemaScoreDatos.IniciarSecuencia();
-        }
-        else
-        {
-            Debug.LogError("¡ERROR FATAL! No se encontró el script ScoreManager. Asegúrate de que esté adjunto al Panel de Score.");
-        }
+        if (sistemaScoreDatos != null) sistemaScoreDatos.IniciarSecuencia();
+        else Debug.LogError("¡ERROR FATAL! No se encontró el script ScoreManager.");
     }
 
-    // --- NUEVA SECUENCIA DE CARGA ASÍNCRONA ---
     public void PresionarIniciar()
     {
         StartCoroutine(CargarNivelAsync("Scene_Game"));
@@ -41,40 +36,56 @@ public class MenuManager : MonoBehaviour
 
     private IEnumerator CargarNivelAsync(string nombreEscena)
     {
-        // 1. Encendemos el panel de carga (aparece tu imagen con la historia)
+        // 1. Encendemos el panel principal
         if (panelCarga != null) panelCarga.SetActive(true);
+        autorizacionParaDescender = false;
 
-        // 2. Mantenemos tu pausa original de 0.4 segundos. 
-        // Esto permite que el jugador escuche el sonido de "Clic" del botón de Start.
         yield return new WaitForSecondsRealtime(0.4f);
 
-        // 3. Le decimos a Unity que empiece a cargar el nivel en segundo plano
+        // 2. Iniciamos carga asíncrona y la BLOQUEAMOS
         AsyncOperation operacion = SceneManager.LoadSceneAsync(nombreEscena);
+        operacion.allowSceneActivation = false;
 
-        // 4. Mientras la carga no termine, actualizamos la matemática del porcentaje
+        // 3. Bucle de carga
         while (!operacion.isDone)
         {
-            // Unity calcula el progreso de 0 a 0.9. Lo forzamos a una escala perfecta de 0 a 100.
             float progreso = Mathf.Clamp01(operacion.progress / 0.9f);
 
-            // Actualizamos el texto en pantalla (el "F0" quita los decimales molestos)
-            if (textoPorcentaje != null)
+            if (operacion.progress < 0.9f)
             {
-                textoPorcentaje.text = "CARGANDO... " + (progreso * 100f).ToString("F0") + "%";
+                if (textoPorcentaje != null)
+                    textoPorcentaje.text = "Comiendo... " + (progreso * 100f).ToString("F0") + "%";
             }
+            else
+            {
+                // YA CARGÓ EL 100%
+                if (textoPorcentaje != null) textoPorcentaje.text = "Tragado, Reanuda";
 
-            // Esperamos al siguiente frame para mantener la animación fluida
+                // Encendemos tu foto/botón para que el jugador lo vea
+                if (botonFotoContinuar != null && !botonFotoContinuar.activeSelf)
+                {
+                    botonFotoContinuar.SetActive(true);
+                }
+
+                // Esperamos a que presiones el botón
+                if (autorizacionParaDescender)
+                {
+                    operacion.allowSceneActivation = true; // ¡Liberamos la bestia!
+                }
+            }
             yield return null;
         }
     }
 
-    // --- FUNCIÓN PARA EL BOTÓN DE SALIR ---
+    // --- ESTA FUNCIÓN LA EJECUTARÁ TU BOTÓN-FOTO ---
+    public void ConfirmarDescenso()
+    {
+        autorizacionParaDescender = true;
+    }
+
     public void PresionarSalir()
     {
-        // Este mensaje aparecerá en la consola de Unity para que sepas que el botón sí funciona
         Debug.Log("¡El jugador ha cerrado el juego!");
-
-        // Esta orden es la que cerrará el juego real una vez que lo exportes (.exe / APK)
         Application.Quit();
     }
 }

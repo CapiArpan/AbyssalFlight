@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocidadCaida: 9
   balancearAlCaer: 1
-  amplitudBalanceo: 1.9
+  amplitudBalanceo: 1.2
   velocidadBalanceo: 1.7
   rotacionAleatoria: 1
   anguloMaximoInclinacion: 20
